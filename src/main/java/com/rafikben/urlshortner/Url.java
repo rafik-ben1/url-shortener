@@ -1,15 +1,12 @@
 package com.rafikben.urlshortner;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Url {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
     private  String url;
 
@@ -17,9 +14,13 @@ public class Url {
         this.url = url;
     }
 
-    public Url() {}
+    public void setId(String id) {
+		this.id = id;
+	}
 
-    public Long getId() {
+	public Url() {}
+
+    public String getId() {
         return id;
     }
 

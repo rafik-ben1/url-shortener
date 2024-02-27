@@ -14,7 +14,7 @@ public class UrlController {
     @Autowired
     private UrlService urlService;
     @GetMapping("{id}")
-    public void redirect (@PathVariable long id, HttpServletResponse res) throws IOException {
+    public void redirect (@PathVariable String id, HttpServletResponse res) throws IOException {
         String redirectUrl = this.urlService.getUrl(id);
         res.sendRedirect(redirectUrl);
     }
