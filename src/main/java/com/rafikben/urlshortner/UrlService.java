@@ -1,22 +1,40 @@
 package com.rafikben.urlshortner;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.Optional;
-import java.util.Random;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UrlService {
-    @Autowired
     private  UrlRepository urlRepository;
+    private SequenceRepository sequenceRepository;
     
-    public String generateId() {
+    public UrlService(UrlRepository urlRepository, SequenceRepository sequenceRepository) {
+		super();
+		this.urlRepository = urlRepository;
+		this.sequenceRepository = sequenceRepository;
+	}
+
+	public String generateId() {
     	String id = "";
-    	Random random = new Random();
+        Sequence sequence = this.sequenceRepository.findAll().get(0);
+        int[] nextIndex = sequence.getNextIndex(); 
     	for(int i=0;i<5;i++ ) {
-    		id = id + (char) (random.nextInt(90-48)+ 48);
+    		id =  (char) (nextIndex[i])+ id ;    		
     	}
+    	nextIndex[0] = nextIndex[0]+1;
+    	for(int i=0;i<5;i++) {
+    		if(nextIndex[i]==90) {
+    			nextIndex[i]=48;
+    			nextIndex[i+1]=nextIndex[i+1]+1;
+    			if(i!=0) {
+    				for(int j = 1 ; j<i;j++ ) {
+    					nextIndex[j] = 48;
+    				}
+    			}
+    		}
+    	}
+    	sequence.setNextIndex(nextIndex);
+    	this.sequenceRepository.save(sequence);
     	return id;
     }
     
